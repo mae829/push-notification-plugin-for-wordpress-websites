@@ -1,4 +1,6 @@
 {
+    "name": "mae829/push-notification-for-post-and-buddypress",
+    "type": "wordpress-plugin",
     "require": {
         "google/apiclient": "^2.15"
     },
@@ -10,5 +12,4 @@
              "FirebaseCloudMessaging"
         ]
     }
-    
 }
