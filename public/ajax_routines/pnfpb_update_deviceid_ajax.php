@@ -66,7 +66,7 @@
 		
 	$dbname = $wpdb->dbname;
 
- 	$is_firebase_version_col = $wpdb->get_results(  "SELECT `COLUMN_NAME` FROM `INFORMATION_SCHEMA`.`COLUMNS` WHERE `table_name` = '{$table}' AND `TABLE_SCHEMA` = '{$dbname}' AND `COLUMN_NAME` = 'firebase_version'"  );
+ 	$is_firebase_version_col = $wpdb->get_results(  "SELECT `COLUMN_NAME` FROM `INFORMATION_SCHEMA`.`COLUMNS` WHERE `table_name` = '{$table}' AND `COLUMN_NAME` = 'firebase_version'"  );
 
 	if( empty($is_firebase_version_col) ):
     	$add_status_column = "ALTER TABLE `{$table}` ADD `firebase_version` VARCHAR(100) DEFAULT 'L'; ";
@@ -147,8 +147,6 @@
 		
 		$table = $wpdb->prefix.'pnfpb_ic_subscribed_deviceids_web';
 		
-		$dbname = $wpdb->dbname;
-		
 		if (isset($_POST['onesignal_externalid'])) {
 			
 			$onesignal_externalid =  sanitize_text_field($_POST['onesignal_externalid']);
@@ -177,8 +175,6 @@
 
 		$table = $wpdb->prefix.'pnfpb_ic_subscribed_deviceids_web';
 			
-		$dbname = $wpdb->dbname;
-		
 		$data = '';
 		
 		if ( $bponesignalid !== 0 ) {
@@ -202,8 +198,6 @@
 
 		$table = $wpdb->prefix.'pnfpb_ic_subscribed_deviceids_web';
 			
-		$dbname = $wpdb->dbname;
-		
 		if ( $bpuserid !== 0 ) {
 					
 			$deviceid_update_status = $wpdb->query("UPDATE {$table} SET subscription_option = '{$bpsubscribeoptions}' WHERE userid = {$bpuserid}") ;
@@ -217,9 +211,7 @@
 	
 		$table = $wpdb->prefix.'pnfpb_ic_subscribed_deviceids_web';
 		
-		$dbname = $wpdb->dbname;
-
- 		$is_status_col = $wpdb->get_results(  "SELECT `COLUMN_NAME` FROM `INFORMATION_SCHEMA`.`COLUMNS`    WHERE `table_name` = '{$table}' AND `TABLE_SCHEMA` = '{$dbname}' AND `COLUMN_NAME` = 'subscription_option'"  );
+ 		$is_status_col = $wpdb->get_results( "SELECT `COLUMN_NAME` FROM `INFORMATION_SCHEMA`.`COLUMNS` WHERE `table_name` = '{$table}' AND `COLUMN_NAME` = 'subscription_option'" );
 
 		if( empty($is_status_col) ):
     		$add_status_column = "ALTER TABLE `{$table}` ADD `subscription_option` VARCHAR(50) NULL DEFAULT NULL AFTER `device_id`; ";
@@ -466,9 +458,7 @@
 		    $table = $wpdb->prefix.'pnfpb_ic_subscribed_deviceids_web';
 			
 			
-			$dbname = $wpdb->dbname;
-
- 			$is_status_col = $wpdb->get_results(  "SELECT `COLUMN_NAME` FROM `INFORMATION_SCHEMA`.`COLUMNS`    WHERE `table_name` = '{$table}' AND `TABLE_SCHEMA` = '{$dbname}' AND `COLUMN_NAME` = 'subscription_option'"  );
+ 			$is_status_col = $wpdb->get_results( "SELECT `COLUMN_NAME` FROM `INFORMATION_SCHEMA`.`COLUMNS` WHERE `table_name` = '{$table}' AND `COLUMN_NAME` = 'subscription_option'" );
 
 			if( empty($is_status_col) ):
     			$add_status_column = "ALTER TABLE `{$table}` ADD `subscription_option` VARCHAR(50) NULL DEFAULT NULL AFTER `device_id`; ";
@@ -734,9 +724,7 @@
 
 		        $table = $wpdb->prefix.'pnfpb_ic_subscribed_deviceids_web';
 				
-				$dbname = $wpdb->dbname;
-
-				$is_status_col = $wpdb->get_results(  "SELECT `COLUMN_NAME` FROM `INFORMATION_SCHEMA`.`COLUMNS`    WHERE `table_name` = '{$table}' AND `TABLE_SCHEMA` = '{$dbname}' AND `COLUMN_NAME` = 'subscription_option'"  );
+				$is_status_col = $wpdb->get_results( "SELECT `COLUMN_NAME` FROM `INFORMATION_SCHEMA`.`COLUMNS` WHERE `table_name` = '{$table}' AND `COLUMN_NAME` = 'subscription_option'" );
 
 				if( empty($is_status_col) ):
 					$add_status_column = "ALTER TABLE `{$table}` ADD `subscription_option` VARCHAR(50) NULL DEFAULT NULL AFTER `device_id`; ";
@@ -1115,9 +1103,7 @@
 
 		    			$table = $wpdb->prefix.'pnfpb_ic_subscribed_deviceids_web';
 						
-						$dbname = $wpdb->dbname;
-
- 						$is_status_col = $wpdb->get_results(  "SELECT `COLUMN_NAME` FROM `INFORMATION_SCHEMA`.`COLUMNS`    WHERE `table_name` = '{$table}' AND `TABLE_SCHEMA` = '{$dbname}' AND `COLUMN_NAME` = 'subscription_option'"  );
+ 						$is_status_col = $wpdb->get_results(  "SELECT `COLUMN_NAME` FROM `INFORMATION_SCHEMA`.`COLUMNS`    WHERE `table_name` = '{$table}' AND `COLUMN_NAME` = 'subscription_option'"  );
 
 						if( empty($is_status_col) ):
     						$add_status_column = "ALTER TABLE `{$table}` ADD `subscription_option` VARCHAR(50) NULL DEFAULT NULL AFTER `device_id`; ";

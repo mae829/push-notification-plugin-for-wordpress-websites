@@ -351,19 +351,15 @@ if ( !class_exists( 'PNFPB_ICFM_Push_Notification_Post_BuddyPress' ) ) {
                     PRIMARY KEY (id)
                 ) {$charset_collate};";
 
-				require_once( ABSPATH . 'wp-admin/includes/upgrade.php' );
-        
-				dbDelta( $sql );			
+				$wpdb->query( $sql );		
 			
-				$dbname = $wpdb->dbname;
-
 				$pnfpb_table_name = $wpdb->prefix . "pnfpb_ic_subscribed_deviceids_web";
 
-				$is_status_col = $wpdb->get_results(  "SELECT `COLUMN_NAME` FROM `INFORMATION_SCHEMA`.`COLUMNS`    WHERE `table_name` = '{$pnfpb_table_name}' AND `TABLE_SCHEMA` = '{$dbname}' AND `COLUMN_NAME` = 'subscription_option'"  );
+				$is_status_col = $wpdb->get_results( "SELECT `COLUMN_NAME` FROM `INFORMATION_SCHEMA`.`COLUMNS` WHERE `table_name` = '{$pnfpb_table_name}' AND `COLUMN_NAME` = 'subscription_option'"  );
 			
-				$is_status_web256 = $wpdb->get_results(  "SELECT `COLUMN_NAME` FROM `INFORMATION_SCHEMA`.`COLUMNS`    WHERE `table_name` = '{$pnfpb_table_name}' AND `TABLE_SCHEMA` = '{$dbname}' AND `COLUMN_NAME` = 'web_256'"  );
+				$is_status_web256 = $wpdb->get_results( "SELECT `COLUMN_NAME` FROM `INFORMATION_SCHEMA`.`COLUMNS` WHERE `table_name` = '{$pnfpb_table_name}' AND `COLUMN_NAME` = 'web_256'"  );
 			
-				$is_firebase_version = $wpdb->get_results(  "SELECT `COLUMN_NAME` FROM `INFORMATION_SCHEMA`.`COLUMNS`    WHERE `table_name` = '{$pnfpb_table_name}' AND `TABLE_SCHEMA` = '{$dbname}' AND `COLUMN_NAME` = 'firebase_version'"  );
+				$is_firebase_version = $wpdb->get_results( "SELECT `COLUMN_NAME` FROM `INFORMATION_SCHEMA`.`COLUMNS` WHERE `table_name` = '{$pnfpb_table_name}' AND `COLUMN_NAME` = 'firebase_version'"  );
 			
 				if( empty($is_status_col) ):
 			
@@ -408,11 +404,9 @@ if ( !class_exists( 'PNFPB_ICFM_Push_Notification_Post_BuddyPress' ) ) {
 				}
 			
 		
-				$dbname = $wpdb->dbname;
-
 				$pnfpb_table_name = $wpdb->prefix . "pnfpb_ic_schedule_push_notifications";
 			
-				$is_recurring_day_number = $wpdb->get_results(  "SELECT `COLUMN_NAME` FROM `INFORMATION_SCHEMA`.`COLUMNS`    WHERE `table_name` = '{$pnfpb_table_name}' AND `TABLE_SCHEMA` = '{$dbname}' AND `COLUMN_NAME` = 'recurring_day_number'"  );
+				$is_recurring_day_number = $wpdb->get_results( "SELECT `COLUMN_NAME` FROM `INFORMATION_SCHEMA`.`COLUMNS` WHERE `table_name` = '{$pnfpb_table_name}' AND `COLUMN_NAME` = 'recurring_day_number'"  );
 			
 				if( empty($is_recurring_day_number) ) {
 
@@ -426,7 +420,7 @@ if ( !class_exists( 'PNFPB_ICFM_Push_Notification_Post_BuddyPress' ) ) {
 				
 				}
 			
-				$is_scheduled_type = $wpdb->get_results(  "SELECT `COLUMN_NAME` FROM `INFORMATION_SCHEMA`.`COLUMNS`    WHERE `table_name` = '{$pnfpb_table_name}' AND `TABLE_SCHEMA` = '{$dbname}' AND `COLUMN_NAME` = 'scheduled_type'"  );
+				$is_scheduled_type = $wpdb->get_results( "SELECT `COLUMN_NAME` FROM `INFORMATION_SCHEMA`.`COLUMNS` WHERE `table_name` = '{$pnfpb_table_name}' AND `COLUMN_NAME` = 'scheduled_type'"  );
 			
 				if( empty($is_scheduled_type) ) {
 
@@ -493,9 +487,7 @@ if ( !class_exists( 'PNFPB_ICFM_Push_Notification_Post_BuddyPress' ) ) {
                     PRIMARY KEY (id)
                 ) {$charset_collate_2};";
 
-			require_once( ABSPATH . 'wp-admin/includes/upgrade.php' );
-        
-			dbDelta( $sql_2 );				
+			$wpdb->query( $sql );
 			
 			if ( ! function_exists( 'action_scheduler_register_3_dot_5_dot_3' ) && function_exists( 'add_action' ) ) {
 			
@@ -9362,9 +9354,7 @@ if ( !class_exists( 'PNFPB_ICFM_Push_Notification_Post_BuddyPress' ) ) {
 			
 			$table = $wpdb->prefix.'pnfpb_ic_subscribed_deviceids_web';
 		
-			$dbname = $wpdb->dbname;
-
-			$is_firebase_version_col = $wpdb->get_results(  "SELECT `COLUMN_NAME` FROM `INFORMATION_SCHEMA`.`COLUMNS` WHERE `table_name` = '{$table}' AND `TABLE_SCHEMA` = '{$dbname}' AND `COLUMN_NAME` = 'firebase_version'"  );
+			$is_firebase_version_col = $wpdb->get_results(  "SELECT `COLUMN_NAME` FROM `INFORMATION_SCHEMA`.`COLUMNS` WHERE `table_name` = '{$table}' AND `COLUMN_NAME` = 'firebase_version'"  );
 
 			if( empty($is_firebase_version_col) ):
 				$add_status_column = "ALTER TABLE `{$table}` ADD `firebase_version` VARCHAR(100) DEFAULT 'L'; ";
