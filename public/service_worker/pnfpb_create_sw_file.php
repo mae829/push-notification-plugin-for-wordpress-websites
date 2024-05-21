@@ -10,30 +10,30 @@
 //
 
 if ( !function_exists( 'PNFPB_icfm_icpush_add_rewrite_rules' ) && !function_exists( 'PNFPB_icfm_icpush_generate_sw' ) ) {
-	
-	
-	add_action( 'init', 'PNFPB_icfm_icpush_add_rewrite_rules' );	
-	
-	add_action( 'parse_request', 'PNFPB_icfm_icpush_generate_sw_pwajson' );	
-	
+
+
+	add_action( 'init', 'PNFPB_icfm_icpush_add_rewrite_rules' );
+
+	add_action( 'parse_request', 'PNFPB_icfm_icpush_generate_sw_pwajson' );
+
 }
 
 // Rewrite rules to create service worker, fire base service worker and manifest dynamically
 if ( !function_exists( 'PNFPB_icfm_icpush_add_rewrite_rules' )) {
-	
+
 	function PNFPB_icfm_icpush_add_rewrite_rules() {
-		
+
 		$sw_filename = home_url( '/' ).'pnfpb_icpush_pwa_sw.js';
 		add_rewrite_rule( "^/{$sw_filename}$","index.php?{$sw_filename}=1");
-		
+
 		$sw_filename_firebasesw = home_url( '/' ).'firebase-messaging-sw.js';
 		add_rewrite_rule( "^/{$sw_filename_firebasesw}$","index.php?{$sw_filename_firebasesw}=1");
-		
+
 		if (get_option('pnfpb_ic_pwa_app_enable') && get_option('pnfpb_ic_pwa_app_enable') === '1') {
 			$manifest_filename_json = home_url( '/' ).'pnfpbmanifest.json';
-			add_rewrite_rule( "^/{$manifest_filename_json}$","index.php?{$manifest_filename_json}=1");		
+			add_rewrite_rule( "^/{$manifest_filename_json}$","index.php?{$manifest_filename_json}=1");
 		}
-		
+
 	}
 }
 
@@ -42,8 +42,14 @@ if ( !function_exists( 'PNFPB_icfm_icpush_add_rewrite_rules' )) {
 if ( !function_exists( 'PNFPB_icfm_icpush_generate_sw_pwajson' )) {
 	function PNFPB_icfm_icpush_generate_sw_pwajson( $query ) {
 		if ( ! property_exists( $query, 'query_vars' ) || ! is_array( $query->query_vars ) ) {
-		return;
+			return;
 		}
+
+		// skip if it's multi dimensional array
+		if ( count( $query->query_vars ) !== count( $query->query_vars, COUNT_RECURSIVE ) ) {
+			return;
+		}
+
 		$query_vars_as_string = implode( ' ', $query->query_vars );
 		$sw_filename = 'pnfpb_icpush_pwa_sw.js';
 		$sw_filename_firebasesw = 'firebase-messaging-sw.js';
@@ -56,7 +62,7 @@ if ( !function_exists( 'PNFPB_icfm_icpush_generate_sw_pwajson' )) {
  						echo $pwa_manifest_contents;
 						exit();
 					}
-			    	else 
+			    	else
 					{
 						return;
 					}
@@ -65,7 +71,7 @@ if ( !function_exists( 'PNFPB_icfm_icpush_generate_sw_pwajson' )) {
 			{
 				header( 'Content-Type: text/javascript' );
 				$firebase_sw_contents =  PNFPB_icfm_icpush_firebasesw_template();
-				echo $firebase_sw_contents;				
+				echo $firebase_sw_contents;
 				exit();
 			}
 		}
@@ -84,9 +90,9 @@ if ( !function_exists( 'PNFPB_icfm_icpush_generate_sw_pwajson' )) {
 
 // Service worker template
 if ( !function_exists( 'PNFPB_icfm_icpush_sw_template' )) {
-	
+
 	function PNFPB_icfm_icpush_sw_template() {
-	
+
 		ob_start();  ?>
 		'use strict';
 
@@ -133,9 +139,9 @@ if ( !function_exists( 'PNFPB_icfm_icpush_sw_template' )) {
 			const offlinePage = "<?php if (get_option('pnfpb_ic_pwa_app_offline_url2') && get_option('pnfpb_ic_pwa_app_offline_url2') !== '') {echo get_option( 'pnfpb_ic_pwa_app_offline_url2');} else {echo get_home_url();} ?>";
 
 			var pnfpbwpSysurls = ['gstatic.com','/wp-admin/','/wp-json/','/s.w.org/','/wp-content/','/wp-login.php','/wp-includes/','/preview=true/','ps.w.org'];
-			
+
 			if (isExcludeallurlsincache === '1'  || isExcludeallurlsincache === 'no') {
-				pnfpbwpSysurls = ['/','gstatic.com','/wp-admin/','/wp-json/','/s.w.org/','/wp-content/','/wp-login.php','/wp-includes/','/preview=true/','ps.w.org'];				
+				pnfpbwpSysurls = ['/','gstatic.com','/wp-admin/','/wp-json/','/s.w.org/','/wp-content/','/wp-login.php','/wp-includes/','/preview=true/','ps.w.org'];
 			}
 
 			var pnfpbexcludeurls = "<?php echo get_option('pnfpb_ic_pwa_app_excludeurls'); ?>";
@@ -225,7 +231,7 @@ if ( !function_exists( 'PNFPB_icfm_icpush_sw_template' )) {
   				//console.log(event.request.url);
   				var reqLocation = getLocation(event.request.url);
   				var reqPath = '';
-			
+
   				var updateCache = function(request){
     				return caches.open(SW.cache_version).then(function (cache) {
       					return fetch(request).then(function (response) {
@@ -250,7 +256,7 @@ if ( !function_exists( 'PNFPB_icfm_icpush_sw_template' )) {
               			})
       				);
       				return;
-  				}  
+  				}
 
   				// Consolidate some conditions for re-use.
   				var requestisAccept = false;
@@ -289,7 +295,7 @@ if ( !function_exists( 'PNFPB_icfm_icpush_sw_template' )) {
               				return caches.match(offlinePage);
           				})
     				);
-    				return;    
+    				return;
   				}
 		});
 	}
@@ -377,7 +383,7 @@ if ( !function_exists( 'PNFPB_icfm_icpush_sw_template' )) {
     	var defaultResponse = promiseResults[1];
    	 	var userCache = promiseResults[2];
     	var userResponse = promiseResults[3];
-	
+
 
     	// Determine whether any cache holds data for this request.
     	var requestIsInDefaultCache = typeof defaultResponse !== 'undefined';
@@ -503,7 +509,7 @@ if ( !function_exists( 'PNFPB_icfm_icpush_sw_template' )) {
     					}
     					if (clients.openWindow)
       						return clients.openWindow(pnfpb_custom_click_action_url);
-  					}))					
+  					}))
 				} else {
 					if (event.action === "close_notification") {
 						event.notification.close();
@@ -528,23 +534,23 @@ if ( !function_exists( 'PNFPB_icfm_icpush_sw_template' )) {
 		},
 		false,
 		);
-		<?php 
+		<?php
 			$sw_contents = ob_get_contents();
-		
+
 			ob_get_clean();
-		
+
 			return $sw_contents;
 
 			//return apply_filters( 'PNFPB_icfm_icpush_sw_template', $sw_contents );
-		
-			
+
+
 	}
 
 }
 
 // Firebase cloud messaging service worker template
 if ( !function_exists( 'PNFPB_icfm_icpush_firebasesw_template' )) {
-	
+
 	function PNFPB_icfm_icpush_firebasesw_template() {
 
 		ob_start();  ?>
@@ -559,12 +565,12 @@ var firebase_sw = '<?php echo PNFPB_PLUGIN_DIR_PATH."build/service_worker/index.
 //importScripts(firebasemsg);
 importScripts(firebase_sw);
 
-		<?php 
+		<?php
 			$firebase_sw_contents = ob_get_contents();
-		
+
 			ob_get_clean();
-		
-			return $firebase_sw_contents;		
+
+			return $firebase_sw_contents;
 			//return apply_filters( 'PNFPB_icfm_icpush_firebasesw_template', ob_get_clean() );
 	}
 }
@@ -594,13 +600,13 @@ if (!function_exists('PNFPB_ic_genenrate_pwa_mainfest_json')) {
   						"background_color": "<?php if (get_option( 'pnfpb_ic_pwa_app_backgroundcolor' )){echo get_option( 'pnfpb_ic_pwa_app_backgroundcolor' );} else { echo '#ffffff';} ?>",
   						"display": "<?php if (get_option( 'pnfpb_ic_pwa_app_display' )) {echo get_option( 'pnfpb_ic_pwa_app_display' );} else { echo 'standalone';} ?>"
 						}
-					<?php 
+					<?php
 						$pwa_manifest_contents = ob_get_contents();
-		
+
 						ob_get_clean();
-		
-						return $pwa_manifest_contents;		
-						//return apply_filters( 'PNFPB_ic_generate_pwa_manifest_json', ob_get_clean() );		
+
+						return $pwa_manifest_contents;
+						//return apply_filters( 'PNFPB_ic_generate_pwa_manifest_json', ob_get_clean() );
 	}
 }
 
