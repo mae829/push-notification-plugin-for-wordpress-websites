@@ -1,0 +1,11 @@
+# git files
+.gitattributes export-ignore
+.gitignore export-ignore
+
+# source files
+LICENSE export-ignore
+README.md export-ignore
+.DS_Store export-ignore
+.npmrc export-ignore
+composer.lock export-ignore
+packages export-ignore
